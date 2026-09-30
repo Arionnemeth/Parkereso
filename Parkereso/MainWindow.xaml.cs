@@ -18,6 +18,8 @@ namespace Parkereso
     {
         private List<string> meretek = new List<string> { "2x2", "4x4", "6x6" };
         private List<int> karakterek;
+
+        int score;
         public MainWindow()
         {
             InitializeComponent();
@@ -26,6 +28,8 @@ namespace Parkereso
 
         private void btn_start_Click(object sender, RoutedEventArgs e)
         {
+            score_block.Text = "0";
+            score = 0;
             int meret_i;
             if (ls_meret_valaszto.SelectedItem != null)
             {
@@ -52,7 +56,10 @@ namespace Parkereso
                     for (int k = 0; k < meret_i * meret_i; k++)
                     {
                         Button btn = new Button();
+                        btn.Background = Brushes.LawnGreen;
                         btn.Name = "btn_" + karakterek[index++].ToString();
+                        btn.FontSize = 20;
+                        btn.FontWeight = FontWeights.Bold;
                         btn.Content = "?";
                         Grid.SetRow(btn, k / meret_i);
                         Grid.SetColumn(btn, k % meret_i);
@@ -73,12 +80,15 @@ namespace Parkereso
             if (btn != null)
             {
                 btn.Content = btn.Name.Split('_')[1];
+                btn.Background = Brushes.LightSkyBlue;
             }
             string felirat = btn.Content.ToString();
             if (elozo_btn == null)
             {
                 elozo_btn = felirat;
                 elozo = btn;
+                btn.Background = Brushes.LightSkyBlue;
+
             }
             else if (elozo_btn == felirat)
             {
@@ -88,6 +98,8 @@ namespace Parkereso
                 elozo.Foreground = Brushes.LightGreen;
                 btn.IsEnabled = false;
                 elozo.IsEnabled = false;
+                score += 1;
+                score_block.Text = score.ToString();
             }
             else
             {
@@ -95,6 +107,10 @@ namespace Parkereso
                 elozo_btn = null;
                 btn.Content = "?";
                 elozo.Content = "?";
+                score += 1;
+                score_block.Text = score.ToString();
+                btn.Background = Brushes.LawnGreen; 
+                elozo.Background = Brushes.LawnGreen;
             }
         }
     }
