@@ -20,13 +20,34 @@ namespace Parkereso
         private List<string> meretek = new List<string> { "2x2", "4x4", "6x6" };
         private List<int> karakterek;
 
+       public Dictionary<string, string> f1 = new Dictionary<string, string>
+                        {
+                            {"Lewis Hamilton", "Ferrari"},
+                            {"Max Verstappen", "Red Bull Racing"},
+                            {"Charles Leclerc", "Ferrari"},
+                            {"Lando Norris", "McLaren"},
+                            {"Sergio Perez", "Caddilac"},
+                            {"George Russell", "Mercedes"},
+                            {"Carlos Sainz", "Williams"},
+                            {"Oscar Piastri", "McLaren"},
+                            {"Valtteri Bottas", "Caddilac"},
+                            {"Fernando Alonso", "Aston Martin"},
+                            {"Esteban Ocon", "Alpine"},
+                            {"Pierre Gasly", "Alpine"},
+                            {"Yuki Tsunoda", "Racing Bulls"},
+                            {"Gabriel Bortoleto", "Audi"},
+                            {"Nico Hulkenberg", "Audi"},
+                            {"Alex Albon", "Williams"},
+                            {"Lance Stroll", "Aston Martin"},
+                            { "Sebastian Vettel", "Red Bull Racing"}
+                        };
 
         int score;
         public MainWindow()
         {
             InitializeComponent();
             ls_meret_valaszto.ItemsSource = meretek;
-            ls_jatekmod.ItemsSource = new List<string> { "Számok", "Emojik" };
+            ls_jatekmod.ItemsSource = new List<string> { "Számok", "Emojik", "F1-esek és csapataik" };
         }
 
         
@@ -90,7 +111,6 @@ namespace Parkereso
                                 Button btn = new Button();
                                 btn.DataContext = smilek[index++];
                                 btn.Background = Brushes.LawnGreen;
-                                // btn.Name = "btn_" + emojik[index++].ToString();
                                 btn.FontSize = 20;
                                 btn.FontWeight = FontWeights.Bold;
                                 btn.Content = "?";
@@ -100,8 +120,33 @@ namespace Parkereso
                                 btn.Click += Btn_Click;    
                         }
                     }
-                    
+                    else if(ls_jatekmod.SelectedItem == "F1-esek és csapataik")
+                    {
+                       
+                        List<string> parok = new List<string>();
+                        foreach (var item in f1.Take(meret_i * meret_i / 2))
+                        {
+                            parok.Add(item.Key);
+                            parok.Add(item.Value);
+                        }
 
+                        parok = parok.Shuffle().ToList();
+                        int index = 0;
+                        for (int k = 0; k < meret_i * meret_i; k++)
+                        {
+                            Button btn = new Button();
+                            btn.Background = Brushes.LawnGreen;
+                            btn.DataContext = parok[index++];
+                            btn.FontSize = 20;
+                            btn.FontWeight = FontWeights.Bold;
+                            btn.Content = "?";
+                            Grid.SetRow(btn, k / meret_i);
+                            Grid.SetColumn(btn, k % meret_i);
+                            puzzle_Grid.Children.Add(btn);
+                            btn.Click += Btn_Click;
+                        }
+
+                    }
                 }
             }
         }
@@ -187,6 +232,52 @@ namespace Parkereso
                     elozo.Background = Brushes.LawnGreen;
                 }
             }
+            else if (ls_jatekmod.SelectedItem?.ToString() == "F1-esek és csapataik")
+            {
+                Button btn = sender as Button;
+
+                string felirat = btn.DataContext.ToString();
+                btn.Content = felirat;
+                btn.Background = Brushes.LightSkyBlue;
+
+                if (elozo_btn == null)
+                {
+                    elozo_btn = felirat;
+                    elozo = btn;
+                }
+                else {
+                    bool talalat =
+                        (f1.ContainsKey(elozo_btn) && f1[elozo_btn] == felirat) ||
+                        (f1.ContainsKey(felirat) && f1[felirat] == elozo_btn);
+
+                    if (talalat)
+                    {
+                        MessageBox.Show("Találtál egy párt!");
+
+                        btn.Foreground = Brushes.LightGreen;
+                        elozo.Foreground = Brushes.LightGreen;
+                        btn.IsEnabled = false;
+                        elozo.IsEnabled = false;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Nem találtál párt!");
+
+                        btn.Content = "?";
+                        elozo.Content = "?";
+                        btn.Background = Brushes.LawnGreen;
+                        elozo.Background = Brushes.LawnGreen;
+                    }
+                    score += 1;
+                    score_block.Text = score.ToString();
+
+                    elozo_btn = null;
+                    elozo = null;
+                }
+
+               
+            }
+
 
         }
 
