@@ -34,10 +34,10 @@ namespace Parkereso
                             {"Fernando Alonso", "Aston Martin"},
                             {"Esteban Ocon", "Alpine"},
                             {"Pierre Gasly", "Alpine"},
-                            {"Yuki Tsunoda", "Racing Bulls"},
+                            {"Logan Sargeant", "Racing Bulls"},
                             {"Gabriel Bortoleto", "Audi"},
                             {"Nico Hulkenberg", "Audi"},
-                            {"Alex Albon", "Williams"},
+                            {"Nicolas Goatifi", "Williams"},
                             {"Lance Stroll", "Aston Martin"},
                             { "Sebastian Vettel", "Red Bull Racing"}
                         };
